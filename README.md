@@ -17,3 +17,35 @@ List of items to do
  - [ ] Ben
  - [ ] Zach H.
 - [ ] Add more items to Todo list
+
+
+#####Base Layout
+```java
+public class Robot extends iteritiveRobot {
+	
+	public void robotInit() {
+	
+	}
+	
+	public void autonomousInit() {
+	
+	}
+	
+	public void autonomousPeriodic() {
+		
+	}
+	
+
+	public void teleopInit() {
+		
+	}
+	
+	public void teleopPeriodic(){
+		
+	}
+	
+	void Test() {
+	}
+	
+};
+```
