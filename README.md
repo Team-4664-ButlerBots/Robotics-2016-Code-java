@@ -3,7 +3,7 @@
 Important Resources
 -------------------
 
-WPI Library = http://wpilib.screenstepslive.com/s/4485/m/13809
+WPI Library = http://wpilib.screenstepslive.com/s/4485
 
 308tube's video series = https://www.youtube.com/playlist?list=PL1F56EA413018EEE1
 
