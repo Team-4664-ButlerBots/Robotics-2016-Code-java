@@ -1,4 +1,4 @@
-public class Robot extends iteritiveRobot {
+public class Robot extends IteritiveRobot {
 	
 	public void robotInit() {
 	
