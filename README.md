@@ -16,7 +16,8 @@ List of items to do
  - [X] Jorge
  - [ ] Ben
  - [ ] Zach H.
-- [ ] Add more items to Todo list
+- [ ] Read through the WPI Library
+- [ ] Set up Eclipse on all (home) computers
 
 
 #####Base Layout
