@@ -15,7 +15,7 @@ List of items to do
 - [ ] Confirm everyone watched all of 308tube's videos about GitHub
  - [X] Jorge
  - [ ] Ben
- - [ ] Zach H.
+ - [X] Zach H.
 - [ ] Read through the WPI Library
 - [ ] Set up Eclipse on all (home) computers
 
