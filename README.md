@@ -13,40 +13,42 @@ List of items to do
 -------------------
 
 - [ ] Confirm everyone watched all of 308tube's videos about GitHub
- - [X] Jorge
- - [ ] Ben
- - [X] Zach H.
-- [ ] Read through the WPI Library
+- [ ] Read through the WPI Library (How to set up Eclipse)
 - [ ] Set up Eclipse on all (home) computers
 
 
 #####Base Layout
 ```java
-public class Robot extends iteritiveRobot {
+
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.livewindow.Livewindow;
+
+public class Robot extends IteritiveRobot {
 	
 	public void robotInit() {
-	
+		
 	}
 	
 	public void autonomousInit() {
-	
+		
 	}
 	
 	public void autonomousPeriodic() {
 		
 	}
 	
-
 	public void teleopInit() {
 		
 	}
 	
-	public void teleopPeriodic(){
+	public void teleopPeriodic() {
 		
 	}
 	
 	void Test() {
+		
 	}
-	
 };
 ```
