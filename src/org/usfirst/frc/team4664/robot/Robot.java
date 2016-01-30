@@ -35,8 +35,8 @@ public class Robot extends SampleRobot {
 
     public Robot() {
         RobotDrive = new RobotDrive(frontLeftChannel, rearLeftChannel, frontRightChannel, rearRightChannel);
-    	RobotDrive.setInvertedMotor(MotorType.kFrontLeft, true);	 //invert the left side motors
-    	RobotDrive.setInvertedMotor(MotorType.kRearLeft, true);		 //you may need to change or remove this to match your robot
+    	//RobotDrive.setInvertedMotor(MotorType.kFrontRight, true);	 //invert the left side motors
+    	//RobotDrive.setInvertedMotor(MotorType.kRearRight, true);		 //you may need to change or remove this to match your robot
         RobotDrive.setExpiration(0.1);
 
         StickController = new Joystick(joystickChannel);
@@ -48,7 +48,7 @@ public class Robot extends SampleRobot {
         //LimitSwitchClaw = new DigitalInput(9);
     	}
     
-      //Runs the motors with Mecanum drive.
+      //Runs the motors with mecanum drive.
     public void autonomousPeriodic() {
     	RobotDrive.mecanumDrive_Cartesian(.25,0,0,0);
     	Timer.delay(1.5);
@@ -57,7 +57,7 @@ public class Robot extends SampleRobot {
     	Timer.delay(2.0);
     	armLift.set(0);
     }
-     
+    
     public void operatorControl() {
         RobotDrive.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
@@ -65,8 +65,11 @@ public class Robot extends SampleRobot {
         	// Use the joystick X axis for lateral movement, Y axis for forward movement, and Z axis for rotation.
         	// This sample does not use field-oriented drive, so the gyro input is set to zero.
             if(speedOverride = true) {
-            	RobotDrive.mecanumDrive_Cartesian((StickController.getX()), (StickController.getY()), (StickController.getZ()), 0);
-            	
+            	RobotDrive.mecanumDrive_Cartesian(DeadBand(StickController.getX()), DeadBand(StickController.getZ()), DeadBand(-StickController.getY()), 0);
+                if(StickController.getRawButton(4)) {
+            		speedOverride = false;
+                	Timer.delay(.0625);
+            	}
             	if(StickController.getRawButton(7)) {
                 	armLift.set(-.9);
             	}
@@ -79,18 +82,17 @@ public class Robot extends SampleRobot {
                 else if(StickController.getRawButton(5)) {
                 	clawTote.set(-.9);
             	}
-                else if(StickController.getRawButton(4)) {
-            		speedOverride = true;
-                	Timer.delay(.0625);
-            	}
                 else {
             		armLift.set(0);
             		clawTote.set(0);
                 }  
             }
             else {
-            	RobotDrive.mecanumDrive_Cartesian((StickController.getX()*.5), (StickController.getY()*.5), (StickController.getZ()*.5), 0);
-            
+            	RobotDrive.mecanumDrive_Cartesian(DeadBand(StickController.getX()*.5), DeadBand(StickController.getZ()*.5), DeadBand(StickController.getY()*.5), 0);
+            	if(StickController.getRawButton(4)) {
+            		speedOverride = true;
+            		Timer.delay(.0625);
+            	}
             	if(StickController.getRawButton(7)) {
             		armLift.set(-.3);
             	}
@@ -107,26 +109,17 @@ public class Robot extends SampleRobot {
             		armLift.set(0);
             		clawTote.set(0);
             	}
-            	if(StickController.getRawButton(4)) {
-            		speedOverride = false;
-            		Timer.delay(.0625);
-            	}
-
-            	else {
-            		armLift.set(0);
-            		clawTote.set(0);
-            	}
             Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
             }
         }
     }
     //Useful functions
-        double DeadBand(float input){
+        double DeadBand(double input) {
         	if(Math.abs(input) < 0.1) {
         		return 0;
         	}
         	else {
         		return input;
         	}
-        }        
+        }
 }
