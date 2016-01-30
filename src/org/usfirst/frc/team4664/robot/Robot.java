@@ -15,14 +15,22 @@ public class Robot extends SampleRobot {
     RobotDrive RobotDrive;
     Joystick StickController;
     Joystick Jstick;
-    //DigitalInput LimitSwitchArm;
-    //DigitalInput LimitSwitchClaw;
+    
+    int i;
+    
+    DigitalInput LSArm;
+    DigitalInput LSClawUp;
+    DigitalInput LSClawBot;
     
      //Channels for the wheels
     final int frontLeftChannel	= 2;
     final int rearLeftChannel	= 3;
     final int frontRightChannel	= 1;
     final int rearRightChannel	= 0;
+    
+    final int LSArmUp 			= 0;
+    final int LSClawUpper		= 1;
+    final int LSClawDown		= 2;
     
     Victor armLift;
     Victor clawTote;
@@ -44,18 +52,57 @@ public class Robot extends SampleRobot {
         
         armLift = new Victor(4);
         clawTote = new Victor(5);
-        //LimitSwitchArm = new DigitalInput(8);
-        //LimitSwitchClaw = new DigitalInput(9);
+        
+        LSArm = new DigitalInput(0);
+        LSClawUp = new DigitalInput(1);
+        LSClawBot = new DigitalInput(2);
     	}
     
       //Runs the motors with mecanum drive.
     public void autonomousPeriodic() {
-    	RobotDrive.mecanumDrive_Cartesian(.25,0,0,0);
-    	Timer.delay(1.5);
-    	RobotDrive.mecanumDrive_Cartesian(0, 0, 0, 0);
-    	armLift.set(-0.5);
-    	Timer.delay(2.0);
-    	armLift.set(0);
+    	
+    	for(i = 0; i < 50; i++) {
+    		if(LSArm) {
+    			SmartDashboard.putString("Arm Limit Switch Active");
+    			Timer.delay(.5);
+    		}
+    		if(LSClawUp) {
+    			SmartDashboard.putString("Claw Upper Limit Switch Active");
+    			Timer.delay(.5);
+    		}
+    		if(LSClawBot) {
+    			SmartDashboard.putString("Claw Bottom Limit Switch Active");
+    			Timer.delay(.5);
+    		}
+    		if(StickController.getRawButton(7)) {
+    			SmartDashboard.putString("Arm Goes Up");
+    			Timer.delay(.5);
+    		}
+    		if(StickController.getRawButton(8)) {
+    			SmartDashboard.putString("Arm Goes Down");
+    			Timer.delay(.5);
+    		}
+    		if(StickController.getRawButton(6)) {
+    			SmartDashboard.putString("Claw Goes Out");
+    			Timer.delay(.5);
+    		}
+    		if(StickController.getRawButton(5)) {
+    			SmartDashboard.putString("Claw Goes In");
+    			Timer.delay(.5);
+    		}
+    		if(StickController.getX() > .8) {
+    			SmartDashboard.putString("Robot Moves Forward");
+    			Timer.delay(.5);
+    		}
+    		if(StickController.getX() > -.8) {
+    			SmartDashboard.putString("Robot Moves Backward");
+    			Timer.delay(.5);
+    		}
+    		if(Math.abs(StickController.getY()) > .8) {
+    			SmartDashboard.putString("Robot Moves Sideways");
+    			Timer.delay(.5);
+    		}
+    	}
     }
     
     public void operatorControl() {
