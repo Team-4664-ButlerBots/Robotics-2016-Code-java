@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 /**
  * This is a demo program showing how to use Mecanum control with the RobotDrive class.
  */
-public class Robot extends SampleRobot {
+public class RobotMain extends SampleRobot {
 	
     RobotDrive robotDrive;
     Joystick stickDrive, joyController;
@@ -29,7 +29,7 @@ public class Robot extends SampleRobot {
     
     Victor armLift;
     
-    public Robot() {
+    public RobotMain() {
         robotDrive = new RobotDrive(frontLeftChannel, rearLeftChannel, frontRightChannel, rearRightChannel);
     	robotDrive.setInvertedMotor(MotorType.kFrontRight, true);	// invert the right side motors
     	robotDrive.setInvertedMotor(MotorType.kRearRight, true);		// you may need to change or remove this to match your robot
