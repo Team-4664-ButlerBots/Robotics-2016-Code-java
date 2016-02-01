@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4664.robot;
 
-import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -25,10 +24,6 @@ public class Robot extends SampleRobot {
     DigitalInput LSArm;
     DigitalInput LSClawUp;
     DigitalInput LSClawBot;
-    
-    Counter LSCArm;
-    Counter LSCClawUp;
-    Counter LSCClawBot;
     
      //Channels for the wheels
     final int frontLeftChannel	= 2;
@@ -64,57 +59,10 @@ public class Robot extends SampleRobot {
         LSArm     		= new DigitalInput(0);
         LSClawUp  		= new DigitalInput(1);
         LSClawBot 		= new DigitalInput(2);
-        
-        LSCArm 			= new Counter(LSArm);
-        LSCClawUp 		= new Counter(LSClawUp);
-        LSCClawBot 		= new Counter(LSClawBot);
-        
     	}
     
       //Runs the motors with mecanum drive.
     public void Test() {
-    	
-    	for(i = 0; i < 50; i++) {
-    		if(LSCArm = 1) {
-    			SmartDashboard.putString("Arm Limit Switch","Active");
-    			Timer.delay(.5);
-    		}
-    		if(LSCClawUp = 1) {
-    			SmartDashboard.putString("Claw Up Limit Switch","Active");
-    			Timer.delay(.5);
-    		}
-    		if(LSCClawBot = 1) {
-    			SmartDashboard.putString("Claw Bot Limit Switch","Active");
-    			Timer.delay(.5);
-    		}
-    		if(StickController.getRawButton(7)) {
-    			SmartDashboard.putString("Arm Goes Up","");
-    			Timer.delay(.5);
-    		}
-    		if(StickController.getRawButton(8)) {
-    			SmartDashboard.putString("Arm Goes Down","");
-    			Timer.delay(.5);
-    		}
-    		if(StickController.getRawButton(6)) {
-    			SmartDashboard.putString("Claw Goes Out","");
-    			Timer.delay(.5);
-    		}
-    		if(StickController.getRawButton(5)) {
-    			SmartDashboard.putString("Claw Goes In","");
-    			Timer.delay(.5);
-    		}
-    		if(StickController.getX() > .8) {
-    			SmartDashboard.putString("Robot Moves Forward","");
-    			Timer.delay(.5);
-    		}
-    		if(StickController.getX() > -.8) {
-    			SmartDashboard.putString("Robot Moves Backward","");
-    			Timer.delay(.5);
-    		}
-    		if(Math.abs(StickController.getY()) > .8) {
-    			SmartDashboard.putString("Robot Moves Sideways","");
-    			Timer.delay(.5);
-    		}
     	}
     }
     
@@ -132,15 +80,22 @@ public class Robot extends SampleRobot {
             	}
             	if(StickController.getRawButton(7)) {
                 	armLift.set(-.9);
+        			SmartDashboard.putNumber("Arm Up Speed", armLift.get());
+
             	}
             	else if(StickController.getRawButton(8)) {
             		armLift.set(.8);
+        			SmartDashboard.putNumber("Arm Down Speed", armLift.get());
+
             	}
             	else if(StickController.getRawButton(6)) {
                 	clawTote.set(.8);
+        			SmartDashboard.putNumber("Claw Extend Speed", clawTote.get());
+
             	}
                 else if(StickController.getRawButton(5)) {
                 	clawTote.set(-.9);
+        			SmartDashboard.putNumber("Claw Retract Speed", clawTote.get());
             	}
                 else {
             		armLift.set(0);
@@ -155,22 +110,30 @@ public class Robot extends SampleRobot {
             	}
             	if(StickController.getRawButton(7)) {
             		armLift.set(-.3);
+        			SmartDashboard.putNumber("Arm Up Speed", armLift.get());
             	}
             	else if(StickController.getRawButton(8)) {
             		armLift.set(.2);
+        			SmartDashboard.putNumber("Arm Down Speed", armLift.get());
             	}
             	else if(StickController.getRawButton(6)) {
             		clawTote.set(.2);
+        			SmartDashboard.putNumber("Claw Extend Speed", clawTote.get());
             	}
             	else if(StickController.getRawButton(5)) {
             		clawTote.set(-.3);
+        			SmartDashboard.putNumber("Claw Retract Speed", clawTote.get());
             	}
             	else {
             		armLift.set(0);
             		clawTote.set(0);
             	}
-            Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
             }
+            Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
+			SmartDashboard.putNumber("Robot Forward Speed", DeadBand(StickController.getX()));
+			SmartDashboard.putNumber("Robot Backward Speed", DeadBand(StickController.getX()));
+			SmartDashboard.putNumber("Robot Sideways Speed", DeadBand(StickController.getY()));
+
         }
     }
     //Useful functions
