@@ -6,7 +6,8 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
  //This is a demo program showing how to use Mecanum control with the RobotDrive class.
@@ -60,47 +61,47 @@ public class Robot extends SampleRobot {
     	}
     
       //Runs the motors with mecanum drive.
-    public void autonomousPeriodic() {
+    public void Test() {
     	
     	for(i = 0; i < 50; i++) {
     		if(LSArm) {
-    			SmartDashboard.putString("Arm Limit Switch Active");
+    			SmartDashboard.putString("Arm Limit Switch","Active");
     			Timer.delay(.5);
     		}
     		if(LSClawUp) {
-    			SmartDashboard.putString("Claw Upper Limit Switch Active");
+    			SmartDashboard.putString("Claw Up Limit Switch","Active");
     			Timer.delay(.5);
     		}
     		if(LSClawBot) {
-    			SmartDashboard.putString("Claw Bottom Limit Switch Active");
+    			SmartDashboard.putString("Claw Bot Limit Switch","Active");
     			Timer.delay(.5);
     		}
     		if(StickController.getRawButton(7)) {
-    			SmartDashboard.putString("Arm Goes Up");
+    			SmartDashboard.putString("Arm Goes Up","");
     			Timer.delay(.5);
     		}
     		if(StickController.getRawButton(8)) {
-    			SmartDashboard.putString("Arm Goes Down");
+    			SmartDashboard.putString("Arm Goes Down","");
     			Timer.delay(.5);
     		}
     		if(StickController.getRawButton(6)) {
-    			SmartDashboard.putString("Claw Goes Out");
+    			SmartDashboard.putString("Claw Goes Out","");
     			Timer.delay(.5);
     		}
     		if(StickController.getRawButton(5)) {
-    			SmartDashboard.putString("Claw Goes In");
+    			SmartDashboard.putString("Claw Goes In","");
     			Timer.delay(.5);
     		}
     		if(StickController.getX() > .8) {
-    			SmartDashboard.putString("Robot Moves Forward");
+    			SmartDashboard.putString("Robot Moves Forward","");
     			Timer.delay(.5);
     		}
     		if(StickController.getX() > -.8) {
-    			SmartDashboard.putString("Robot Moves Backward");
+    			SmartDashboard.putString("Robot Moves Backward","");
     			Timer.delay(.5);
     		}
     		if(Math.abs(StickController.getY()) > .8) {
-    			SmartDashboard.putString("Robot Moves Sideways");
+    			SmartDashboard.putString("Robot Moves Sideways","");
     			Timer.delay(.5);
     		}
     	}
