@@ -1,13 +1,15 @@
 package org.usfirst.frc.team4664.robot;
 
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Victor;
+
 
 
  //This is a demo program showing how to use Mecanum control with the RobotDrive class.
@@ -24,15 +26,19 @@ public class Robot extends SampleRobot {
     DigitalInput LSClawUp;
     DigitalInput LSClawBot;
     
+    Counter LSCArm;
+    Counter LSCClawUp;
+    Counter LSCClawBot;
+    
      //Channels for the wheels
     final int frontLeftChannel	= 2;
     final int rearLeftChannel	= 3;
     final int frontRightChannel	= 1;
     final int rearRightChannel	= 0;
     
-    final int LSArmUp 			= 0;
-    final int LSClawUpper		= 1;
-    final int LSClawDown		= 2;
+    final int LSArmPort			= 0;
+    final int LSClawUpPort		= 1;
+    final int LSClawBotPort		= 2;
     
     Victor armLift;
     Victor clawTote;
@@ -50,29 +56,34 @@ public class Robot extends SampleRobot {
         RobotDrive.setExpiration(0.1);
 
         StickController = new Joystick(joystickChannel);
-        Jstick = new Joystick(joystickChannel1);
+        Jstick 			= new Joystick(joystickChannel1);
         
-        armLift = new Victor(4);
-        clawTote = new Victor(5);
+        armLift  		= new Victor(4);
+        clawTote 		= new Victor(5);
         
-        LSArm = new DigitalInput(0);
-        LSClawUp = new DigitalInput(1);
-        LSClawBot = new DigitalInput(2);
+        LSArm     		= new DigitalInput(0);
+        LSClawUp  		= new DigitalInput(1);
+        LSClawBot 		= new DigitalInput(2);
+        
+        LSCArm 			= new Counter(LSArm);
+        LSCClawUp 		= new Counter(LSClawUp);
+        LSCClawBot 		= new Counter(LSClawBot);
+        
     	}
     
       //Runs the motors with mecanum drive.
     public void Test() {
     	
     	for(i = 0; i < 50; i++) {
-    		if(LSArm) {
+    		if(LSCArm = 1) {
     			SmartDashboard.putString("Arm Limit Switch","Active");
     			Timer.delay(.5);
     		}
-    		if(LSClawUp) {
+    		if(LSCClawUp = 1) {
     			SmartDashboard.putString("Claw Up Limit Switch","Active");
     			Timer.delay(.5);
     		}
-    		if(LSClawBot) {
+    		if(LSCClawBot = 1) {
     			SmartDashboard.putString("Claw Bot Limit Switch","Active");
     			Timer.delay(.5);
     		}
