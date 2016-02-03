@@ -19,8 +19,6 @@ public class Robot extends SampleRobot {
     Joystick StickController;
     Joystick Jstick;
     
-    int i;
-    
     DigitalInput LSArm;
     DigitalInput LSClawUp;
     DigitalInput LSClawBot;
@@ -62,9 +60,6 @@ public class Robot extends SampleRobot {
     	}
     
       //Runs the motors with mecanum drive.
-    public void Test() {
-    	}
-    }
     
     public void operatorControl() {
         RobotDrive.setSafetyEnabled(true);
@@ -130,9 +125,18 @@ public class Robot extends SampleRobot {
             	}
             }
             Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
-			SmartDashboard.putNumber("Robot Forward Speed", DeadBand(StickController.getX()));
-			SmartDashboard.putNumber("Robot Backward Speed", DeadBand(StickController.getX()));
-			SmartDashboard.putNumber("Robot Sideways Speed", DeadBand(StickController.getY()));
+			if (StickController.getX() > 0) {
+				SmartDashboard.putNumber("Robot Forward Speed", DeadBand(StickController.getX()));
+			}
+			else {
+				SmartDashboard.putNumber("Robot Backward Speed", DeadBand(StickController.getX()));
+			}
+			if (StickController.getY() > 0) {
+				SmartDashboard.putNumber("Robot Right Speed", DeadBand(StickController.getY()));
+			}
+			else {
+				SmartDashboard.putNumber("Robot Right Speed", DeadBand(StickController.getY()));
+			}
 
         }
     }
