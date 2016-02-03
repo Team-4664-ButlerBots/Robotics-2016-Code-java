@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4664.robot;
 
-import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -25,10 +24,6 @@ public class Robot extends SampleRobot {
     DigitalInput LSArm;
     DigitalInput LSClawUp;
     DigitalInput LSClawBot;
-    
-    Counter LSCArm;
-    Counter LSCClawUp;
-    Counter LSCClawBot;
     
      //Channels for the wheels
     final int frontLeftChannel	= 2;
@@ -61,29 +56,23 @@ public class Robot extends SampleRobot {
         armLift  		= new Victor(4);
         clawTote 		= new Victor(5);
         
-        LSArm     		= new DigitalInput(0);
-        LSClawUp  		= new DigitalInput(1);
-        LSClawBot 		= new DigitalInput(2);
-        
-        LSCArm 			= new Counter(LSArm);
-        LSCClawUp 		= new Counter(LSClawUp);
-        LSCClawBot 		= new Counter(LSClawBot);
-        
+        LSArm     		= new DigitalInput(LSArmPort);
+        LSClawUp  		= new DigitalInput(LSClawUpPort);
+        LSClawBot 		= new DigitalInput(LSClawBotPort);
     	}
     
       //Runs the motors with mecanum drive.
-    public void Test() {
-    	
+    public void test() {
     	for(i = 0; i < 50; i++) {
-    		if(LSCArm = 1) {
+    		if(!LSArm.get()) {
     			SmartDashboard.putString("Arm Limit Switch","Active");
     			Timer.delay(.5);
     		}
-    		if(LSCClawUp = 1) {
+    		if(!LSClawUp.get()) {
     			SmartDashboard.putString("Claw Up Limit Switch","Active");
     			Timer.delay(.5);
     		}
-    		if(LSCClawBot = 1) {
+    		if(!LSClawBot.get()) {
     			SmartDashboard.putString("Claw Bot Limit Switch","Active");
     			Timer.delay(.5);
     		}
