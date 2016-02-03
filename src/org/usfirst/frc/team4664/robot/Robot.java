@@ -71,7 +71,7 @@ public class Robot extends SampleRobot {
             	RobotDrive.mecanumDrive_Cartesian(DeadBand(StickController.getX()), DeadBand(StickController.getZ()), DeadBand(-StickController.getY()), 0);
                 if(StickController.getRawButton(4)) {
             		speedOverride = false;
-                	Timer.delay(.0625);
+                	Timer.delay(.1);
             	}
             	if(StickController.getRawButton(7)) {
                 	armLift.set(-.9);
@@ -81,9 +81,12 @@ public class Robot extends SampleRobot {
             	else if(StickController.getRawButton(8)) {
             		armLift.set(.8);
         			SmartDashboard.putNumber("Arm Down Speed", armLift.get());
-
             	}
-            	else if(StickController.getRawButton(6)) {
+            	else {
+            		armLift.set(0);
+        			SmartDashboard.putNumber("Arm Status", "Stopped");
+            	}
+            	if(StickController.getRawButton(6)) {
                 	clawTote.set(.8);
         			SmartDashboard.putNumber("Claw Extend Speed", clawTote.get());
 
@@ -93,15 +96,29 @@ public class Robot extends SampleRobot {
         			SmartDashboard.putNumber("Claw Retract Speed", clawTote.get());
             	}
                 else {
-            		armLift.set(0);
             		clawTote.set(0);
+        			SmartDashboard.putString("Claw Status", "Stopped");
                 }  
+            	if(LSArm.get() == 0) {
+            		SmartDashboard.putString("Arm LS", "Reached");
+            	}
+            	else if(LSClawUp.get() == 0) {
+            		SmartDashboard.putString("Claw Up LS", "Reached");
+            	}
+            	else if(LSClawBot.get() == 0) {
+            		SmartDashboard.putString("Claw Bot LS", "Reached");
+            	}
+            	else {
+            		SmartDashboard.putString("Arm LS", "Not Reached");
+            		SmartDashboard.putString("Claw Up LS", "Not Reached");
+            		SmartDashboard.putString("Claw Bot LS", "Not Reached");
+            	}
             }
             else {
             	RobotDrive.mecanumDrive_Cartesian(DeadBand(StickController.getX()*.5), DeadBand(StickController.getZ()*.5), DeadBand(StickController.getY()*.5), 0);
             	if(StickController.getRawButton(4)) {
             		speedOverride = true;
-            		Timer.delay(.0625);
+            		Timer.delay(.1);
             	}
             	if(StickController.getRawButton(7)) {
             		armLift.set(-.3);
@@ -121,21 +138,43 @@ public class Robot extends SampleRobot {
             	}
             	else {
             		armLift.set(0);
+        			SmartDashboard.putNumber("Arm Status", "Stopped");
             		clawTote.set(0);
+        			SmartDashboard.putNumber("Claw Status", "Stopped");
+            	}
+            	if(LSArm.get() == 0) {
+            		SmartDashboard.putString("Arm LS", "Reached");
+            	}
+            	else if(LSClawUp.get() == 0) {
+            		SmartDashboard.putString("Claw Up LS", "Reached");
+            	}
+            	else if(LSClawBot.get() == 0) {
+            		SmartDashboard.putString("Claw Bot LS", "Reached");
+            	}
+            	else {
+            		SmartDashboard.putString("Arm LS", "Not Reached");
+            		SmartDashboard.putString("Claw Up LS", "Not Reached");
+            		SmartDashboard.putString("Claw Bot LS", "Not Reached");
             	}
             }
             Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
 			if (StickController.getX() > 0) {
 				SmartDashboard.putNumber("Robot Forward Speed", DeadBand(StickController.getX()));
 			}
-			else {
+			else if (StickController.getX() < 0) {
 				SmartDashboard.putNumber("Robot Backward Speed", DeadBand(StickController.getX()));
+			}
+			else {
+				SmartDashboard.putString("Robot Lateral Status", "Stopped");
 			}
 			if (StickController.getY() > 0) {
 				SmartDashboard.putNumber("Robot Right Speed", DeadBand(StickController.getY()));
 			}
-			else {
+			else if (StickController.getY() < 0) {
 				SmartDashboard.putNumber("Robot Right Speed", DeadBand(StickController.getY()));
+			}
+			else {
+				SmartDashboard.putString("Robot Horizontal Status", "Stopped");
 			}
 
         }
