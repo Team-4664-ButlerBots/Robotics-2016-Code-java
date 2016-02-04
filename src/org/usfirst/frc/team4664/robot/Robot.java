@@ -174,7 +174,10 @@ public class Robot extends SampleRobot {
         			SmartDashboard.putString("Claw Status", "Stopped");
             	}
             }
+            
             Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
+            
+            
 			if (StickController.getX() > 0) {																//Displays Robot Speed
 				SmartDashboard.putNumber("Robot Forward Speed", DeadBand(StickController.getX()));	
 			}
@@ -184,6 +187,7 @@ public class Robot extends SampleRobot {
 			else {
 				SmartDashboard.putString("Robot Lateral Status", "Stopped");
 			}
+			
 			if (StickController.getY() > 0) {
 				SmartDashboard.putNumber("Robot Right Speed", DeadBand(StickController.getY()));
 			}
