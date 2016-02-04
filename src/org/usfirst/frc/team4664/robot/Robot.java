@@ -58,11 +58,6 @@ public class Robot extends SampleRobot {
         LSClawBot 		= new DigitalInput(LSClawBotPort);
     	
     
-      //Runs the motors with mecanum drive.
-
-        LSArm     		= new DigitalInput(0);
-        LSClawUp  		= new DigitalInput(1);
-        LSClawBot 		= new DigitalInput(2);
     	}
     
       //Runs the motors with mecanum drive.
@@ -70,19 +65,36 @@ public class Robot extends SampleRobot {
     public void operatorControl() {
         RobotDrive.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
-        	
-        	// Use the joystick X axis for lateral movement, Y axis for forward movement, and Z axis for rotation.
-        	// This sample does not use field-oriented drive, so the gyro input is set to zero.
+
             if(speedOverride = true) {
             	RobotDrive.mecanumDrive_Cartesian(DeadBand(StickController.getX()), DeadBand(StickController.getZ()), DeadBand(-StickController.getY()), 0);
                 if(StickController.getRawButton(4)) {
             		speedOverride = false;
                 	Timer.delay(.1);
             	}
-            	if(StickController.getRawButton(7)) {
+                
+            	if(LSArm.get()) {																		//Limit Switches
+            		armLift.set(0);
+            		SmartDashboard.putString("Arm LS", "Reached");
+            	}
+            	else if(LSClawUp.get()) {
+            		clawTote.set(0);
+            		SmartDashboard.putString("Claw Up LS", "Reached");
+            	}
+            	else if(LSClawBot.get()) {
+            		clawTote.set(0);
+            		SmartDashboard.putString("Claw Bot LS", "Reached");
+            	}
+            	else {
+            		SmartDashboard.putString("Arm LS", "Not Reached");
+            		SmartDashboard.putString("Claw Up LS", "Not Reached");
+            		SmartDashboard.putString("Claw Bot LS", "Not Reached");
+            	}
+            	
+            	
+            	if(StickController.getRawButton(7)) {														//Arm Code
                 	armLift.set(-.9);
         			SmartDashboard.putNumber("Arm Up Speed", armLift.get());
-
             	}
             	else if(StickController.getRawButton(8)) {
             		armLift.set(.8);
@@ -92,7 +104,8 @@ public class Robot extends SampleRobot {
             		armLift.set(0);
         			SmartDashboard.putString("Arm Status", "Stopped");
             	}
-            	if(StickController.getRawButton(6)) {
+            	
+            	if(StickController.getRawButton(6)) {														//Claw Code
                 	clawTote.set(.8);
         			SmartDashboard.putNumber("Claw Extend Speed", clawTote.get());
 
@@ -104,21 +117,7 @@ public class Robot extends SampleRobot {
                 else {
             		clawTote.set(0);
         			SmartDashboard.putString("Claw Status", "Stopped");
-                }  
-            	if(LSArm.get()) {
-            		SmartDashboard.putString("Arm LS", "Reached");
-            	}
-            	else if(LSClawUp.get()) {
-            		SmartDashboard.putString("Claw Up LS", "Reached");
-            	}
-            	else if(LSClawBot.get()) {
-            		SmartDashboard.putString("Claw Bot LS", "Reached");
-            	}
-            	else {
-            		SmartDashboard.putString("Arm LS", "Not Reached");
-            		SmartDashboard.putString("Claw Up LS", "Not Reached");
-            		SmartDashboard.putString("Claw Bot LS", "Not Reached");
-            	}
+                } 
             }
             else {
             	RobotDrive.mecanumDrive_Cartesian(DeadBand(StickController.getX()*.5), DeadBand(StickController.getZ()*.5), DeadBand(StickController.getY()*.5), 0);
@@ -126,7 +125,27 @@ public class Robot extends SampleRobot {
             		speedOverride = true;
             		Timer.delay(.1);
             	}
-            	if(StickController.getRawButton(7)) {
+            	
+            	if(LSArm.get()) {																		//Limit Switches
+            		armLift.set(0);
+            		SmartDashboard.putString("Arm LS", "Reached");
+            	}
+            	else if(LSClawUp.get()) {
+            		clawTote.set(0);
+            		SmartDashboard.putString("Claw Up LS", "Reached");
+            	}
+            	else if(LSClawBot.get()) {
+            		clawTote.set(0);
+            		SmartDashboard.putString("Claw Bot LS", "Reached");
+            	}
+            	else {
+            		SmartDashboard.putString("Arm LS", "Not Reached");
+            		SmartDashboard.putString("Claw Up LS", "Not Reached");
+            		SmartDashboard.putString("Claw Bot LS", "Not Reached");
+            	}
+            	
+            	
+            	if(StickController.getRawButton(7)) {														//Arm Code
             		armLift.set(-.3);
         			SmartDashboard.putNumber("Arm Up Speed", armLift.get());
             	}
@@ -134,7 +153,12 @@ public class Robot extends SampleRobot {
             		armLift.set(.2);
         			SmartDashboard.putNumber("Arm Down Speed", armLift.get());
             	}
-            	else if(StickController.getRawButton(6)) {
+            	else {
+            		armLift.set(0);
+        			SmartDashboard.putString("Arm Status", "Stopped");
+            	}
+            	
+            	if(StickController.getRawButton(6)) {														//Claw Code
             		clawTote.set(.2);
         			SmartDashboard.putNumber("Claw Extend Speed", clawTote.get());
             	}
@@ -145,27 +169,14 @@ public class Robot extends SampleRobot {
             	else {
             		armLift.set(0);
         			SmartDashboard.putString("Arm Status", "Stopped");
+
             		clawTote.set(0);
         			SmartDashboard.putString("Claw Status", "Stopped");
             	}
-            	if(LSArm.get()) {
-            		SmartDashboard.putString("Arm LS", "Reached");
-            	}
-            	else if(LSClawUp.get()) {
-            		SmartDashboard.putString("Claw Up LS", "Reached");
-            	}
-            	else if(LSClawBot.get()) {
-            		SmartDashboard.putString("Claw Bot LS", "Reached");
-            	}
-            	else {
-            		SmartDashboard.putString("Arm LS", "Not Reached");
-            		SmartDashboard.putString("Claw Up LS", "Not Reached");
-            		SmartDashboard.putString("Claw Bot LS", "Not Reached");
-            	}
             }
             Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
-			if (StickController.getX() > 0) {
-				SmartDashboard.putNumber("Robot Forward Speed", DeadBand(StickController.getX()));
+			if (StickController.getX() > 0) {																//Displays Robot Speed
+				SmartDashboard.putNumber("Robot Forward Speed", DeadBand(StickController.getX()));	
 			}
 			else if (StickController.getX() < 0) {
 				SmartDashboard.putNumber("Robot Backward Speed", DeadBand(StickController.getX()));
