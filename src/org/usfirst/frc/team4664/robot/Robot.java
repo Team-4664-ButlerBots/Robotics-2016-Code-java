@@ -35,6 +35,8 @@ public class Robot extends SampleRobot {
     
     boolean speedOverride = false;
     
+    double clock = 0;
+    
     //The channel on the driver station that the joystick is connected to
     final int joystickChannel	= 0;
     final int joystickChannel1 	= 1;
@@ -61,7 +63,12 @@ public class Robot extends SampleRobot {
       //Runs the motors with mecanum drive.
     
     public void Test {
-    	
+    	while(isEnabled) {
+    		SmartDashboard.putString("Testing", "Active");
+    		SmartDashboard.putNumber("Timer", clock);
+    		clock = clock = .05;
+    		Timer.delay(.05);
+    	}
     }
     
     public void operatorControl() {
