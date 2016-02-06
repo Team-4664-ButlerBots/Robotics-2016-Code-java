@@ -99,24 +99,6 @@ public class Robot extends SampleRobot {
                 	Timer.delay(.1);
             	}
                 
-            	if(LSArm.get()) {																			//Limit Switches
-            		SmartDashboard.putString("Arm LS", "Reached");				
-            		armLift.set(.8);
-            		Timer.delay(.2);
-            		armLift.set(0);
-            	}
-            	else if(LSClawUp.get()) {
-            		SmartDashboard.putString("Claw Up LS", "Reached");
-            		clawTote.set(-.8);
-            		Timer.delay(.2);
-            		clawTote.set(0);
-            	}
-            	else if(LSClawBot.get()) {
-            		SmartDashboard.putString("Claw Bot LS", "Reached");
-            		clawTote.set(.8);
-            		Timer.delay(.2);
-            		clawTote.set(0);
-            	}
             	else {
             		SmartDashboard.putString("Arm LS", "Not Reached");
             		SmartDashboard.putString("Claw Up LS", "Not Reached");
