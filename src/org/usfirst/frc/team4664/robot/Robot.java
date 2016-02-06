@@ -1,8 +1,8 @@
 package org.usfirst.frc.team4664.robot;
 
-import java.beans.Encoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SampleRobot;
@@ -74,15 +74,14 @@ public class Robot extends SampleRobot {
     
       //Runs the motors with mecanum drive.
     
-    public Test {
-    	while(isEnabled) {
+    public void Test() {
+    	while(isEnabled()) {
     		int count = armHeight.get();
     		SmartDashboard.putString("Testing", "Active");
-    		SmartDashboard.putBoolean("Testing", isEnabled);
-    		SmartDashboard.putNumber("LS Arm", LSArm);
+    		SmartDashboard.putBoolean("LS Arm", LSArm.get());
     		SmartDashboard.putNumber("Arm Height", count);
-    		SmartDashboard.putNumber("LS Claw Up", LSClawUp);
-    		SmartDashboard.putNumber("LS Claw Bot", LSClawBot);
+    		SmartDashboard.putBoolean("LS Claw Up", LSClawUp.get());
+    		SmartDashboard.putBoolean("LS Claw Bot", LSClawBot.get());
     		SmartDashboard.putNumber("Timer", clock);
     		clock += .05;
     		Timer.delay(.05);
@@ -159,7 +158,7 @@ public class Robot extends SampleRobot {
             		Timer.delay(.1);
             	}
             	
-            	if(LSArm.get()) {																		//Limit Switches
+            	if(LSArm.get()) {																			//Limit Switches
             		SmartDashboard.putString("Arm LS", "Reached");
             		armLift.set(.8);
             		Timer.delay(.2);
