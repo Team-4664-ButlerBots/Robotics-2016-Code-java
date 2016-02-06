@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.Victor;
 
 
 
- //This is a demo program showing how to use Mecanum control with the RobotDrive class.
- 
 public class Robot extends SampleRobot {
 	
     RobotDrive RobotDrive;
@@ -43,8 +41,8 @@ public class Robot extends SampleRobot {
 
     public Robot() {
         RobotDrive = new RobotDrive(frontLeftChannel, rearLeftChannel, frontRightChannel, rearRightChannel);
-    	//RobotDrive.setInvertedMotor(MotorType.kFrontRight, true);	 //invert the left side motors
-    	//RobotDrive.setInvertedMotor(MotorType.kRearRight, true);		 //you may need to change or remove this to match your robot
+    	//RobotDrive.setInvertedMotor(MotorType.kFrontRight, true);	 		//invert the left side motors
+    	//RobotDrive.setInvertedMotor(MotorType.kRearRight, true);			//you may need to change or remove this to match your robot
         RobotDrive.setExpiration(0.1);
 
         StickController = new Joystick(joystickChannel);
@@ -62,6 +60,10 @@ public class Robot extends SampleRobot {
     
       //Runs the motors with mecanum drive.
     
+    public void Test {
+    	
+    }
+    
     public void operatorControl() {
         RobotDrive.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
@@ -73,17 +75,23 @@ public class Robot extends SampleRobot {
                 	Timer.delay(.1);
             	}
                 
-            	if(LSArm.get()) {																		//Limit Switches
+            	if(LSArm.get()) {																			//Limit Switches
+            		SmartDashboard.putString("Arm LS", "Reached");				
+            		armLift.set(.8);
+            		Timer.delay(.2);
             		armLift.set(0);
-            		SmartDashboard.putString("Arm LS", "Reached");
             	}
             	else if(LSClawUp.get()) {
-            		clawTote.set(0);
             		SmartDashboard.putString("Claw Up LS", "Reached");
+            		clawTote.set(-.8);
+            		Timer.delay(.2);
+            		clawTote.set(0);
             	}
             	else if(LSClawBot.get()) {
-            		clawTote.set(0);
             		SmartDashboard.putString("Claw Bot LS", "Reached");
+            		clawTote.set(.8);
+            		Timer.delay(.2);
+            		clawTote.set(0);
             	}
             	else {
             		SmartDashboard.putString("Arm LS", "Not Reached");
@@ -127,16 +135,22 @@ public class Robot extends SampleRobot {
             	}
             	
             	if(LSArm.get()) {																		//Limit Switches
-            		armLift.set(0);
             		SmartDashboard.putString("Arm LS", "Reached");
+            		armLift.set(.8);
+            		Timer.delay(.2);
+            		armLift.set(0);
             	}
             	else if(LSClawUp.get()) {
-            		clawTote.set(0);
             		SmartDashboard.putString("Claw Up LS", "Reached");
+            		clawTote.set(-.8);
+            		Timer.delay(.2);
+            		clawTote.set(0);
             	}
             	else if(LSClawBot.get()) {
-            		clawTote.set(0);
             		SmartDashboard.putString("Claw Bot LS", "Reached");
+            		clawTote.set(.8);
+            		Timer.delay(.2);
+            		clawTote.set(0);
             	}
             	else {
             		SmartDashboard.putString("Arm LS", "Not Reached");
