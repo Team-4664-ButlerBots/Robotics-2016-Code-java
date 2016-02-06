@@ -1,5 +1,7 @@
 package org.usfirst.frc.team4664.robot;
 
+import java.beans.Encoder;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -20,6 +22,8 @@ public class Robot extends SampleRobot {
     DigitalInput LSClawUp;
     DigitalInput LSClawBot;
     
+    Encoder armHeight;
+    
      //Channels for the wheels
     final int frontLeftChannel	= 2;
     final int rearLeftChannel	= 3;
@@ -29,6 +33,9 @@ public class Robot extends SampleRobot {
     final int LSArmPort			= 0;
     final int LSClawUpPort		= 1;
     final int LSClawBotPort		= 2;
+    
+    final int Enc1				= 6;
+    final int Enc2				= 7;
     
     Victor armLift;
     Victor clawTote;
@@ -57,17 +64,27 @@ public class Robot extends SampleRobot {
         LSClawUp  		= new DigitalInput(LSClawUpPort);
         LSClawBot 		= new DigitalInput(LSClawBotPort);
     	
-    
+        armHeight 		= new Encoder(Enc1, Enc2, true, Encoder.EncodingType.k4X);
+        armHeight.setMaxPeriod(.1);
+        armHeight.setMinRate(10);
+        armHeight.setDistancePerPulse(5);
+        armHeight.setReverseDirection(true);
+        armHeight.setSamplesToAverage(7);
     	}
     
       //Runs the motors with mecanum drive.
     
-    public void Test {
+    public Test {
     	while(isEnabled) {
+    		int count = armHeight.get();
     		SmartDashboard.putString("Testing", "Active");
-    		SmartDashboard.putNumber("Timer", clock);
     		SmartDashboard.putBoolean("Testing", isEnabled);
-    		clock = clock = .05;
+    		SmartDashboard.putNumber("LS Arm", LSArm);
+    		SmartDashboard.putNumber("Arm Height", count);
+    		SmartDashboard.putNumber("LS Claw Up", LSClawUp);
+    		SmartDashboard.putNumber("LS Claw Bot", LSClawBot);
+    		SmartDashboard.putNumber("Timer", clock);
+    		clock += .05;
     		Timer.delay(.05);
     	}
     }
@@ -211,7 +228,7 @@ public class Robot extends SampleRobot {
 			}
 			
 			if (StickController.getY() > 0) {
-				SmartDashboard.putNumber("Robot Right Speed", DeadBand(StickController.getY()));
+				SmartDashboard.putNumber("Robot Left Speed", DeadBand(StickController.getY()));
 			}
 			else if (StickController.getY() < 0) {
 				SmartDashboard.putNumber("Robot Right Speed", DeadBand(StickController.getY()));
