@@ -66,6 +66,7 @@ public class Robot extends SampleRobot {
     	while(isEnabled) {
     		SmartDashboard.putString("Testing", "Active");
     		SmartDashboard.putNumber("Timer", clock);
+    		SmartDashboard.putBoolean("Testing", isEnabled);
     		clock = clock = .05;
     		Timer.delay(.05);
     	}
