@@ -40,7 +40,9 @@ public class Robot extends SampleRobot {
     Victor armLift;
     Victor clawTote;
     
-    boolean speedOverride = false;
+    double speedL = .4;
+    double speedH = .8;
+    
     
     double clock = 0;
     
@@ -91,160 +93,90 @@ public class Robot extends SampleRobot {
     public void operatorControl() {
         RobotDrive.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
-
-            if(speedOverride = true) {
-            	RobotDrive.mecanumDrive_Cartesian(DeadBand(StickController.getX()), DeadBand(StickController.getZ()), DeadBand(-StickController.getY()), 0);
-                if(StickController.getRawButton(4)) {
-            		speedOverride = false;
-                	Timer.delay(.1);
-            	}
-                
-            	if(LSArm.get()) {																			//Limit Switches
-            		SmartDashboard.putString("Arm LS", "Reached");				
-            		armLift.set(.8);
-            		Timer.delay(.2);
-            		armLift.set(0);
-            	}
-            	else if(LSClawUp.get()) {
-            		SmartDashboard.putString("Claw Up LS", "Reached");
-            		clawTote.set(-.8);
-            		Timer.delay(.2);
-            		clawTote.set(0);
-            	}
-            	else if(LSClawBot.get()) {
-            		SmartDashboard.putString("Claw Bot LS", "Reached");
-            		clawTote.set(.8);
-            		Timer.delay(.2);
-            		clawTote.set(0);
-            	}
-            	else {
-            		SmartDashboard.putString("Arm LS", "Not Reached");
-            		SmartDashboard.putString("Claw Up LS", "Not Reached");
-            		SmartDashboard.putString("Claw Bot LS", "Not Reached");
-            	}
+        		
+        		double speed = StickController.getRawButton(4)?speedL:speedH;
+        		
+            	RobotDrive.mecanumDrive_Cartesian(DeadBand(StickController.getX() * speed), DeadBand(StickController.getZ() * speed), 
+            			DeadBand(-StickController.getY() * speed), 0);
             	
+            	String ArmState;
             	
-            	if(StickController.getRawButton(7)) {														//Arm Code
+            	if(StickController.getRawButton(7) && LSArm.get() != true) {													//Arm Code
                 	armLift.set(-.9);
-        			SmartDashboard.putNumber("Arm Up Speed", armLift.get());
+                	ArmState = "Up";
             	}
             	else if(StickController.getRawButton(8)) {
             		armLift.set(.8);
-        			SmartDashboard.putNumber("Arm Down Speed", armLift.get());
+            		ArmState = "Down";
             	}
             	else {
             		armLift.set(0);
-        			SmartDashboard.putString("Arm Status", "Stopped");
+            		ArmState = "False";
             	}
-            	
-            	if(StickController.getRawButton(6)) {														//Claw Code
+            	String ClawState;
+            	if(StickController.getRawButton(6) && LSClawBot.get() != true) {												//Claw Code
                 	clawTote.set(.8);
-        			SmartDashboard.putNumber("Claw Extend Speed", clawTote.get());
-
+                	ClawState = "Up";
             	}
-                else if(StickController.getRawButton(5)) {
+                else if(StickController.getRawButton(5) && LSClawUp.get() != true) {
                 	clawTote.set(-.9);
-        			SmartDashboard.putNumber("Claw Retract Speed", clawTote.get());
+                	ClawState = "Down";
             	}
                 else {
             		clawTote.set(0);
-        			SmartDashboard.putString("Claw Status", "Stopped");
+            		ClawState = "False";
                 } 
-            }
-            else {
-            	RobotDrive.mecanumDrive_Cartesian(DeadBand(StickController.getX()*.5), DeadBand(StickController.getZ()*.5), DeadBand(StickController.getY()*.5), 0);
-            	if(StickController.getRawButton(4)) {
-            		speedOverride = true;
-            		Timer.delay(.1);
+
+            
+            
+            	Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
+
+            	if (StickController.getY() > 0) {	
+            		SmartDashboard.putNumber("Robot Forward Speed", DeadBand(StickController.getY()));			//Robot Speed
             	}
-            	
-            	if(LSArm.get()) {																			//Limit Switches
-            		SmartDashboard.putString("Arm LS", "Reached");
-            		armLift.set(.8);
-            		Timer.delay(.2);
-            		armLift.set(0);
+            	else{
+            		SmartDashboard.putNumber("Robot Backward Speed", DeadBand(StickController.getY()));
             	}
-            	else if(LSClawUp.get()) {
-            		SmartDashboard.putString("Claw Up LS", "Reached");
-            		clawTote.set(-.8);
-            		Timer.delay(.2);
-            		clawTote.set(0);
-            	}
-            	else if(LSClawBot.get()) {
-            		SmartDashboard.putString("Claw Bot LS", "Reached");
-            		clawTote.set(.8);
-            		Timer.delay(.2);
-            		clawTote.set(0);
+			
+            	if (StickController.getX() > 0 ) {
+            		SmartDashboard.putNumber("Robot Left Speed", DeadBand(StickController.getX()));
             	}
             	else {
-            		SmartDashboard.putString("Arm LS", "Not Reached");
+            		SmartDashboard.putNumber("Robot Right Speed", DeadBand(StickController.getX()));
+            	}
+			
+            	if (LSArm.get()) {
+            		SmartDashboard.putString("Arm LS", "Reached");												//Limit Switches
+            	}
+            	else {
+        			SmartDashboard.putString("Arm LS", "Not Reached");
+            	}
+            	
+            	if (LSClawUp.get()) {
+            		SmartDashboard.putString("Claw Up LS", "Reached");
+            	}
+            	else {
             		SmartDashboard.putString("Claw Up LS", "Not Reached");
+            	}
+            	
+            	if (LSClawBot.get()) {
+            		SmartDashboard.putString("Claw Bot LS", "Reached");
+            	}
+            	else {
             		SmartDashboard.putString("Claw Bot LS", "Not Reached");
             	}
-            	
-            	
-            	if(StickController.getRawButton(7)) {														//Arm Code
-            		armLift.set(-.3);
-        			SmartDashboard.putNumber("Arm Up Speed", armLift.get());
-            	}
-            	else if(StickController.getRawButton(8)) {
-            		armLift.set(.2);
-        			SmartDashboard.putNumber("Arm Down Speed", armLift.get());
-            	}
-            	else {
-            		armLift.set(0);
-        			SmartDashboard.putString("Arm Status", "Stopped");
-            	}
-            	
-            	if(StickController.getRawButton(6)) {														//Claw Code
-            		clawTote.set(.2);
-        			SmartDashboard.putNumber("Claw Extend Speed", clawTote.get());
-            	}
-            	else if(StickController.getRawButton(5)) {
-            		clawTote.set(-.3);
-        			SmartDashboard.putNumber("Claw Retract Speed", clawTote.get());
-            	}
-            	else {
-            		armLift.set(0);
-        			SmartDashboard.putString("Arm Status", "Stopped");
-
-            		clawTote.set(0);
-        			SmartDashboard.putString("Claw Status", "Stopped");
-            	}
-            }
-            
-            Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
-            
-            
-			if (StickController.getX() > 0) {																//Displays Robot Speed
-				SmartDashboard.putNumber("Robot Forward Speed", DeadBand(StickController.getX()));	
-			}
-			else if (StickController.getX() < 0) {
-				SmartDashboard.putNumber("Robot Backward Speed", DeadBand(StickController.getX()));
-			}
-			else {
-				SmartDashboard.putString("Robot Lateral Status", "Stopped");
-			}
-			
-			if (StickController.getY() > 0) {
-				SmartDashboard.putNumber("Robot Left Speed", DeadBand(StickController.getY()));
-			}
-			else if (StickController.getY() < 0) {
-				SmartDashboard.putNumber("Robot Right Speed", DeadBand(StickController.getY()));
-			}
-			else {
-				SmartDashboard.putString("Robot Horizontal Status", "Stopped");
-			}
-
+            	SmartDashboard.putString("Claw Moving", ClawState);												//Claw Status
+    			SmartDashboard.putString("Arm Moving", ArmState);												//Arm Status
         }
     }
-    //Useful functions
-        double DeadBand(double input) {
-        	if(Math.abs(input) < 0.1) {
-        		return 0;
-        	}
-        	else {
-        		return input;
-        	}
+        
+        //Useful functions
+        	double DeadBand(double input) {
+        		if(Math.abs(input) < 0.3) {
+        			return 0;
+        		}
+        		else {
+        			return input;
+        		}
         }
 }
