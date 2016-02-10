@@ -20,17 +20,17 @@ public class Robot extends SampleRobot {
     Victor capture;
     
     
-    final int lsMotor	= 0;
-    final int rsMotor	= 1;
-    final int armPort   = 2;
-    final int capturePort=3;
+    final int lsMotor	  = 0;
+    final int rsMotor	  = 1;
+    final int armPort     = 2;
+    final int capturePort = 3;
     
     //The channel on the driver station that the joystick is connected to
     final int joystickChannel	= 0;
 
     public Robot() {
-    	rightSide = new Victor(lsMotor);
-    	leftSide  = new Victor(rsMotor);
+    	rightSide = new Victor(rsMotor);
+    	leftSide  = new Victor(lsMotor);
     	arm       = new Victor(armPort);
     	capture   = new Victor(capturePort);
     	
@@ -42,15 +42,15 @@ public class Robot extends SampleRobot {
     public void operatorControl() {
         TankDrive.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
-        	TankDrive.tankDrive(DeadBand(StickController.getY()), DeadBand(StickController.getRawAxis(3)));
+        	TankDrive.tankDrive(DeadBand(0.75*StickController.getY()), DeadBand(0.75*StickController.getRawAxis(3)));
         	if(StickController.getRawButton(6)) {
-        		arm.set(0.5);
+        		capture.set(1.0);
         	}
         	else if(StickController.getRawButton(5)) {
-        		arm.set(-0.5);
+        		capture.set(-1.0);
         	}
         	else {
-        		arm.set(0);
+        		capture.set(0);
         	}
         	
         	Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles   
