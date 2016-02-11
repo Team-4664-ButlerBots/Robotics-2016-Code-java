@@ -1,14 +1,9 @@
 package org.usfirst.frc.team4664.robot;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Victor;
-
-
- //This is a demo program showing how to use Mecanum control with the RobotDrive class.
- 
+import edu.wpi.first.wpilibj.Victor; 
 public class Robot extends SampleRobot {
 	//Systems
     RobotDrive TankDrive;
@@ -18,7 +13,6 @@ public class Robot extends SampleRobot {
     Victor leftSide;
     Victor arm;
     Victor capture;
-    
     
     final int lsMotor	  = 0;
     final int rsMotor	  = 1;
@@ -42,7 +36,7 @@ public class Robot extends SampleRobot {
     public void operatorControl() {
         TankDrive.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
-        	TankDrive.tankDrive(DeadBand(0.75*StickController.getY()), DeadBand(0.75*StickController.getRawAxis(3)));
+        	TankDrive.tankDrive(DeadBand(-StickController.getY()), DeadBand(-StickController.getRawAxis(3)));
         	if(StickController.getRawButton(6)) {
         		capture.set(1.0);
         	}
