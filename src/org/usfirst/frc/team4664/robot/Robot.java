@@ -40,12 +40,12 @@ public class Robot extends SampleRobot {
     final int joy2Port  = 1;
     
     public Robot() {
-    	rightSide = new Victor(rsMotor);
-    	leftSide  = new Victor(lsMotor);
-    	armSpeed  = new Victor(armSPort);
-    	armTorque = new Victor(armTPort);
-    	lattice   = new Victor(latPort);
-    	winch     = new Victor(winchPort);
+    	rightSide  = new Victor(rsMotor);
+    	leftSide   = new Victor(lsMotor);
+    	armSpeed   = new Victor(armSPort);
+    	armTorque  = new Victor(armTPort);
+    	lattice    = new Victor(latPort);
+    	winch      = new Victor(winchPort);
         driveTrain = new RobotDrive(leftSide, rightSide);
         joy1 = new Joystick(joy1Port);
         joy2 = new Joystick(joy2Port);
