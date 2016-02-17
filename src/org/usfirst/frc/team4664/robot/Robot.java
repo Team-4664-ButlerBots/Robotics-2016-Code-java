@@ -99,9 +99,9 @@ public class Robot extends SampleRobot {
             	RobotDrive.mecanumDrive_Cartesian(DeadBand(StickController.getX() * speed), DeadBand(StickController.getZ() * speed), 
             			DeadBand(-StickController.getY() * speed), 0);
             	
-            	String ArmState;
             	
-            	if(StickController.getRawButton(7) && LSArm.get() != true) {													//Arm Code
+            	String ArmState;
+            	if(StickController.getRawButton(7) && LSArm.get() != true) {									//Arm Code
                 	armLift.set(-.9);
                 	ArmState = "Up";
             	}
@@ -113,8 +113,9 @@ public class Robot extends SampleRobot {
             		armLift.set(0);
             		ArmState = "False";
             	}
+            	
             	String ClawState;
-            	if(StickController.getRawButton(6) && LSClawBot.get() != true) {												//Claw Code
+            	if(StickController.getRawButton(6) && LSClawBot.get() != true) {								//Claw Code
                 	clawTote.set(.8);
                 	ClawState = "Up";
             	}
@@ -126,8 +127,6 @@ public class Robot extends SampleRobot {
             		clawTote.set(0);
             		ClawState = "False";
                 } 
-
-            
             
             	Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
 
@@ -153,17 +152,17 @@ public class Robot extends SampleRobot {
             	}
             	
             	if (LSClawUp.get()) {
-            		SmartDashboard.putString("Claw Up LS", "Reached");
+            		SmartDashboard.putString("Claw Upper LS", "Reached");
             	}
             	else {
-            		SmartDashboard.putString("Claw Up LS", "Not Reached");
+            		SmartDashboard.putString("Claw Upper LS", "Not Reached");
             	}
             	
             	if (LSClawBot.get()) {
-            		SmartDashboard.putString("Claw Bot LS", "Reached");
+            		SmartDashboard.putString("Claw Bottom LS", "Reached");
             	}
             	else {
-            		SmartDashboard.putString("Claw Bot LS", "Not Reached");
+            		SmartDashboard.putString("Claw Bottom LS", "Not Reached");
             	}
             	SmartDashboard.putString("Claw Moving", ClawState);												//Claw Status
     			SmartDashboard.putString("Arm Moving", ArmState);												//Arm Status
