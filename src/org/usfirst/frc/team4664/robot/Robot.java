@@ -1,4 +1,5 @@
 package org.usfirst.frc.team4664.robot;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SampleRobot;
@@ -12,6 +13,8 @@ public class Robot extends SampleRobot {
     Victor rightSide, leftSide;//Drive train motors
     Victor lattice, winch;//The Scissor lift & winch respectively
     Victor armSpeed, armTorque;//armSpeed spins the intake wheels; armTorque moves input in out
+    //Camera
+    CameraServer Server;
     //Ports
     final int lsMotor	  = 0;
     final int rsMotor	  = 1;
@@ -49,6 +52,9 @@ public class Robot extends SampleRobot {
         driveTrain = new RobotDrive(leftSide, rightSide);
         joy1 = new Joystick(joy1Port);
         joy2 = new Joystick(joy2Port);
+        Server = CameraServer.getInstance();
+        Server.setQuality(50);
+        Server.startAutomaticCapture("cam0");
     	}
     
     public void operatorControl() {
@@ -78,7 +84,8 @@ public class Robot extends SampleRobot {
         	}else{
         		winch.set(0.0);
         	}
-        	Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles   
+        	
+        	Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
         }
     }
     
