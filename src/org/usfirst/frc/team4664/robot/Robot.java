@@ -1,4 +1,5 @@
 package org.usfirst.frc.team4664.robot;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SampleRobot;
@@ -12,6 +13,10 @@ public class Robot extends SampleRobot {
     Victor rightSide, leftSide;//Drive train motors
     Victor lattice, winch;//The Scissor lift & winch respectively
     Victor armCapture, armTorque;//armSpeed spins the intake wheels; armTorque moves input in out
+    //Limit Switches
+    DigitalInput lSArmBot, lSArmUp;
+    DigitalInput lSLatticeOut, lSLatticeIn;
+    DigitalInput lSCapture;
     //Ports
     final int lsMotor   = 0;
     final int rsMotor	= 1;
@@ -39,17 +44,28 @@ public class Robot extends SampleRobot {
     //Laptop ports
     final int joy1Port = 0;
     final int joy2Port = 1;
+    //Limit Switch Ports
+    final int lSArmBotPort     = 0;
+    final int lSArmUpPort      = 1;
+    final int lSLatticeOutPort = 2;
+    final int lSLatticeInPort  = 3;
+    final int lSCapturePort    = 4;
     
     public Robot() {
-    	rightSide  = new Victor(rsMotor);
-    	leftSide   = new Victor(lsMotor);
-    	armCapture = new Victor(armCPort);
-    	armTorque  = new Victor(armTPort);
-    	lattice    = new Victor(latPort);
-    	winch      = new Victor(winchPort);
-        driveTrain = new RobotDrive(leftSide, rightSide);
-        joy1 = new Joystick(joy1Port);
-        joy2 = new Joystick(joy2Port);
+    	rightSide    = new Victor(rsMotor);
+    	leftSide     = new Victor(lsMotor);
+    	armCapture   = new Victor(armCPort);
+    	armTorque    = new Victor(armTPort);
+    	lattice      = new Victor(latPort);
+    	winch        = new Victor(winchPort);
+        driveTrain   = new RobotDrive(leftSide, rightSide);
+        joy1         = new Joystick(joy1Port);
+        joy2         = new Joystick(joy2Port);
+        lSArmBot     = new DigitalInput(lSArmBotPort);
+        lSArmUp      = new DigitalInput(lSArmUpPort);
+        lSLatticeOut = new DigitalInput(lSLatticeOutPort);
+        lSLatticeIn  = new DigitalInput(lSLatticeInPort);
+        lSCapture    = new DigitalInput(lSCapturePort);
     	}
     
     public void operatorControl() {
@@ -58,8 +74,16 @@ public class Robot extends SampleRobot {
         	//Drive train
         	driveTrain.arcadeDrive(Deadband(-joy1.getX(), driveXDb), Deadband(-joy1.getY(), driveYDb)); //joy1 is drive
         	//Arm Code
-        	armTorque.set(Deadband(joy2.getY(), armTorqueDb));  //armTorque
-        	if(joy2.getRawButton(armCaptureB)){					//armSpeed
+        	if(joy2.getY() >= armTorqueDb && lSArmUp.get()) {
+        	    armTorque.set(Deadband(joy2.getY(), armTorqueDb));  //armTorque
+            }
+        	else if(joy2.getY() <= -armTorqueDb && lSArmBot.get()) {
+            	armTorque.set(Deadband(joy2.getY(), armTorqueDb));  //armTorque
+            }
+        	else {
+        		armTorque.set(0);
+        	}
+        	if(joy2.getRawButton(armCaptureB) && lSCapture.get()){					//armSpeed
         		armCapture.set(-armCaptureVal);
         	}else if(joy2.getRawButton(armReleaseB)){
         		armCapture.set(armCaptureVal);
@@ -67,9 +91,9 @@ public class Robot extends SampleRobot {
         		armCapture.set(0.0);
         	}
         	//lift system code
-        	if(joy2.getRawButton(latticeUpB)){					//lattice
+        	if(joy2.getRawButton(latticeUpB) && lSLatticeIn.get()){					//lattice
         		lattice.set(latticeUp);
-        	}else if(joy2.getRawButton(latticeDownB)){
+        	}else if(joy2.getRawButton(latticeDownB) && lSLatticeOut.get()){
         		lattice.set(latticeDown);
         	}else{
         		lattice.set(0.0);
