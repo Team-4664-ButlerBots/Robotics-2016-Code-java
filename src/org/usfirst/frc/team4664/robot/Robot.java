@@ -2,6 +2,7 @@ package org.usfirst.frc.team4664.robot;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
@@ -15,6 +16,9 @@ public class Robot extends SampleRobot {
     Victor armSpeed, armTorque;//armSpeed spins the intake wheels; armTorque moves input in out
     //Camera
     CameraServer Server;
+    //SmartDashboard Stuff
+    String ArmStatus;
+    String WinchStatus;
     //Ports
     final int lsMotor	  = 0;
     final int rsMotor	  = 1;
@@ -53,7 +57,7 @@ public class Robot extends SampleRobot {
         joy1 = new Joystick(joy1Port);
         joy2 = new Joystick(joy2Port);
         Server = CameraServer.getInstance();
-        Server.setQuality(50);
+        Server.setQuality(100);
         Server.startAutomaticCapture("cam0");
     	}
     
@@ -72,19 +76,27 @@ public class Robot extends SampleRobot {
         	//lift system code
         	if(joy2.getRawButton(latticeUpB)){					//lattice
         		lattice.set(latticeUp);
+        		ArmStatus = "Rising";
         	}else if(joy2.getRawButton(latticeDownB)){
         		lattice.set(latticeDown);
+        		ArmStatus = "Lowering";
         	}else{
         		lattice.set(0.0);
+        		ArmStatus = "False";
         	}
         	if(joy2.getRawButton(winchOutB)){					//winch
         		winch.set(winchOut);
+        		WinchStatus = "Extending";
         	}else if(joy2.getRawButton(winchInB)){
         		winch.set(winchIn);
+        		WinchStatus = "Retracting";
         	}else{
         		winch.set(0.0);
+        		WinchStatus = "False";
         	}
-        	
+        	SmartDashboard.putString("Arm Status", ArmStatus);
+        	SmartDashboard.putString("Winch Status", WinchStatus);
+        	SmartDashboard.putData("Arm Limit Switch", LSArm);
         	Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
         }
     }
