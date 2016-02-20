@@ -43,7 +43,7 @@ public class Robot extends SampleRobot {
     public Robot() {
     	rightSide  = new Victor(rsMotor);
     	leftSide   = new Victor(lsMotor);
-    	armCapture   = new Victor(armCPort);
+    	armCapture = new Victor(armCPort);
     	armTorque  = new Victor(armTPort);
     	lattice    = new Victor(latPort);
     	winch      = new Victor(winchPort);
