@@ -10,13 +10,13 @@ public class Robot extends SampleRobot {
     RobotDrive driveTrain;
     Joystick joy1, joy2;
     //Motors
-    Victor rightSide, leftSide;//Drive train motors
-    Victor lattice, winch;//The Scissor lift & winch respectively
-    Victor armCapture, armTorque;//armSpeed spins the intake wheels; armTorque moves input in out
+    Victor rightSide, leftSide;             //Drive train motors
+    Victor lattice, winch;                  //The Scissor lift & winch respectively
+    Victor armCapture, armTorque;           //armSpeed spins the intake wheels; armTorque moves input in out
     //Limit Switches
-    DigitalInput lSArmBot, lSArmUp;
-    DigitalInput lSLatticeOut, lSLatticeIn;
-    DigitalInput lSCapture;
+    DigitalInput lSArmBot, lSArmUp;         //Limit switch for the arm
+    DigitalInput lSLatticeOut, lSLatticeIn; //Limit switch for the Lattice
+    DigitalInput lSCapture;                 //Limit switch for the ball intake
     //Ports
     final int lsMotor   = 0;
     final int rsMotor	= 1;
@@ -74,18 +74,18 @@ public class Robot extends SampleRobot {
         	//Drive train
         	driveTrain.arcadeDrive(Deadband(-joy1.getX(), driveXDb), Deadband(-joy1.getY(), driveYDb)); //joy1 is drive
         	//Arm Code
-        	if(joy2.getY() >= armTorqueDb && lSArmUp.get()) {
-        	    armTorque.set(Deadband(joy2.getY(), armTorqueDb));  //armTorque
+        	if(Deadband(joy2.getY(),armTorqueDb) > 0 && lSArmUp.get()) {
+        	    armTorque.set(Deadband(joy2.getY(), armTorqueDb));  //Raising the arm
             }
-        	else if(joy2.getY() <= -armTorqueDb && lSArmBot.get()) {
-            	armTorque.set(Deadband(joy2.getY(), armTorqueDb));  //armTorque
+        	else if(Deadband(joy2.getY(),armTorqueDb) < 0 && lSArmBot.get()) {
+            	armTorque.set(Deadband(joy2.getY(), armTorqueDb));  //Lowering the arm
             }
         	else {
         		armTorque.set(0);
         	}
-        	if(joy2.getRawButton(armCaptureB) && lSCapture.get()){					//armSpeed
+        	if(joy2.getRawButton(armCaptureB) && lSCapture.get()){					//Intake
         		armCapture.set(-armCaptureVal);
-        	}else if(joy2.getRawButton(armReleaseB)){
+        	}else if(joy2.getRawButton(armReleaseB)){  //Expel
         		armCapture.set(armCaptureVal);
         	}else{
         		armCapture.set(0.0);
