@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4664.robot;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SampleRobot;
@@ -12,24 +13,30 @@ public class Robot extends SampleRobot {
     //Motors
     Victor rightSide, leftSide;//Drive train motors
     Victor lattice, winch;//The Scissor lift & winch respectively
-    Victor armSpeed, armTorque;//armSpeed spins the intake wheels; armTorque moves input in out
+    Victor armSpeed, armTorqueLeft, armTorqueRight;//armSpeed spins the intake wheels; armTorque moves input in out
     //Camera
-    CameraServer Server;
+    CameraServer eyeOfProvidence;
+    //Limit Switch
+    DigitalInput LSLattice;
+    final int LSLatticePort = 0;
     //Ports
     final int lsMotor	  = 0;
     final int rsMotor	  = 1;
-    final int armTPort    = 2;
-    final int armSPort	  = 3;
-    final int latPort     = 4;
-    final int winchPort   = 5;
+    final int armTPortL   = 2;
+    final int armTPortR   = 3;
+    final int armCPort	  = 4;
+    final int latPort     = 5;
+    final int winchPort   = 6;
     //joystick 2 buttons
-    final int armSpeedB    = 6;
+    final int armCaptureB  = 6;
+    final int armReleaseB  = 7;
     final int latticeUpB   = 3;
     final int latticeDownB = 2;
     final int winchOutB    = 4;
     final int winchInB     = 5;
     //speed variables
-    final double armSpeedVal   = 0.25;
+    final double armCSpeedVal  = -1.0;
+    final double armRSpeedVal  = 1.0;
     final double winchOut      = 1.0;
     final double winchIn       = -.7;
     final double latticeUp     = 0.8;
@@ -39,38 +46,43 @@ public class Robot extends SampleRobot {
     final double driveYDb    = 0.3;
     final double armTorqueDb = 0.2;
     //Laptop ports
-    final int joy1Port	= 0;
-    final int joy2Port  = 1;
+    final int joy1Port	= 1;
+    final int joy2Port  = 2;
     
     public Robot() {
-    	rightSide  = new Victor(rsMotor);
-    	leftSide   = new Victor(lsMotor);
-    	armSpeed   = new Victor(armSPort);
-    	armTorque  = new Victor(armTPort);
-    	lattice    = new Victor(latPort);
-    	winch      = new Victor(winchPort);
-        driveTrain = new RobotDrive(leftSide, rightSide);
-        joy1 = new Joystick(joy1Port);
-        joy2 = new Joystick(joy2Port);
-        Server = CameraServer.getInstance();
-        Server.setQuality(50);
-        Server.startAutomaticCapture("cam0");
+    	rightSide      = new Victor(rsMotor);
+    	leftSide       = new Victor(lsMotor);
+    	armSpeed       = new Victor(armCPort);
+    	armTorqueLeft  = new Victor(armTPortL);
+    	armTorqueRight = new Victor(armTPortR);
+    	lattice        = new Victor(latPort);
+    	winch          = new Victor(winchPort);
+        driveTrain     = new RobotDrive(leftSide, rightSide);
+        joy1   = new Joystick(joy1Port);
+        joy2   = new Joystick(joy2Port);
+        eyeOfProvidence = CameraServer.getInstance();
+        eyeOfProvidence.setQuality(50);
+        eyeOfProvidence.startAutomaticCapture("cam0");
+        LSLattice = new DigitalInput(LSLatticePort);
     	}
     
     public void operatorControl() {
         driveTrain.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
         	//Drivetrain
-        	driveTrain.arcadeDrive(Deadband(joy1.getX(), driveXDb), Deadband(joy1.getY(), driveYDb)); //joy1 is drive
+        	driveTrain.arcadeDrive(joy1); //joy1 is drive
         	//Arm Code
-        	armTorque.set(Deadband(joy2.getY(), armTorqueDb));  //armTorque
-        	if(joy2.getRawButton(armSpeedB)){					//armSpeed
-        		armSpeed.set(armSpeedVal);
+        	armTorqueLeft.set(Deadband(joy2.getY(), armTorqueDb));  //armTorqueLeft
+        	armTorqueRight.set(Deadband(-joy2.getY(), armTorqueDb)); //armTouqueRight
+        	if(joy2.getRawButton(armCaptureB)){					//armSpeed
+        		armSpeed.set(armCSpeedVal);
+        	}else if(joy2.getRawButton(armReleaseB)){
+        		armSpeed.set(armRSpeedVal);
         	}else{
         		armSpeed.set(0.0);
         	}
         	//lift system code
-        	if(joy2.getRawButton(latticeUpB)){					//lattice
+        	if(joy2.getRawButton(latticeUpB) && LSLattice.get()){					//lattice
         		lattice.set(latticeUp);
         	}else if(joy2.getRawButton(latticeDownB)){
         		lattice.set(latticeDown);
