@@ -11,26 +11,27 @@ public class Robot extends SampleRobot {
     //Motors
     Victor rightSide, leftSide;//Drive train motors
     Victor lattice, winch;//The Scissor lift & winch respectively
-    Victor armSpeed, armTorque;//armSpeed spins the intake wheels; armTorque moves input in out
+    Victor armCapture, armTorque;//armSpeed spins the intake wheels; armTorque moves input in out
     //Ports
     final int lsMotor   = 0;
     final int rsMotor	= 1;
-    final int armCPort	= 2;
-    final int armTPort  = 3;
+    final int armTPort  = 2;
+    final int armCPort	= 3;
     final int latPort   = 4;
     final int winchPort = 5;
     //joystick 2 buttons
     final int armCaptureB  = 6;
+    final int armReleaseB  = 7;
     final int latticeUpB   = 3;
     final int latticeDownB = 2;
     final int winchOutB    = 4;
     final int winchInB     = 5;
     //speed variables
-    final double armSpeedVal = 0.25;
-    final double winchOut    = 1.0;
-    final double winchIn     = -.7;
-    final double latticeUp   = 0.8;
-    final double latticeDown = -.5;
+    final double armCaptureVal = 0.25;
+    final double winchOut	   = 1.0;
+    final double winchIn       = -.7;
+    final double latticeUp     = 0.8;
+    final double latticeDown   = -.5;
     //dead band variables
     final double driveXDb    = 0.3;
     final double driveYDb    = 0.3;
@@ -42,7 +43,7 @@ public class Robot extends SampleRobot {
     public Robot() {
     	rightSide  = new Victor(rsMotor);
     	leftSide   = new Victor(lsMotor);
-    	armSpeed   = new Victor(armCPort);
+    	armCapture   = new Victor(armCPort);
     	armTorque  = new Victor(armTPort);
     	lattice    = new Victor(latPort);
     	winch      = new Victor(winchPort);
@@ -55,13 +56,15 @@ public class Robot extends SampleRobot {
         driveTrain.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
         	//Drive train
-        	driveTrain.arcadeDrive(Deadband(joy1.getX(), driveXDb), Deadband(joy1.getY(), driveYDb)); //joy1 is drive
+        	driveTrain.arcadeDrive(Deadband(-joy1.getX(), driveXDb), Deadband(-joy1.getY(), driveYDb)); //joy1 is drive
         	//Arm Code
         	armTorque.set(Deadband(joy2.getY(), armTorqueDb));  //armTorque
         	if(joy2.getRawButton(armCaptureB)){					//armSpeed
-        		armSpeed.set(armSpeedVal);
+        		armCapture.set(-armCaptureVal);
+        	}else if(joy2.getRawButton(armReleaseB)){
+        		armCapture.set(armCaptureVal);
         	}else{
-        		armSpeed.set(0.0);
+        		armCapture.set(0.0);
         	}
         	//lift system code
         	if(joy2.getRawButton(latticeUpB)){					//lattice
