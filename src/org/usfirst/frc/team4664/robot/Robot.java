@@ -54,7 +54,7 @@ public class Robot extends SampleRobot {
     public void operatorControl() {
         driveTrain.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
-        	//Drivetrain
+        	//Drive train
         	driveTrain.arcadeDrive(Deadband(joy1.getX(), driveXDb), Deadband(joy1.getY(), driveYDb)); //joy1 is drive
         	//Arm Code
         	armTorque.set(Deadband(joy2.getY(), armTorqueDb));  //armTorque
