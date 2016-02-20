@@ -17,16 +17,16 @@ public class Robot extends SampleRobot {
     //Camera
     CameraServer eyeOfProvidence;
     //Limit Switch
-    DigitalInput LSLattice;
-    final int LSLatticePort = 0;
+    DigitalInput LSArm;
+    final int LSArmPort = 0;
     //Ports
-    final int lsMotor	  = 0;
-    final int rsMotor	  = 1;
-    final int armTPortL   = 2;
-    final int armTPortR   = 3;
-    final int armCPort	  = 4;
-    final int latPort     = 5;
-    final int winchPort   = 6;
+    final int lsMotor	  = 0; //Left Side Motor
+    final int rsMotor	  = 1; //Right Side Motor
+    final int armTPortL   = 2; //Arm Left Port
+    final int armTPortR   = 3; //Arm Right Port
+    final int armCPort	  = 4; //Arm Capture Port
+    final int latPort     = 5; //Lattice (scissor lift) port
+    final int winchPort   = 6; //Winch Port
     //joystick 2 buttons
     final int armCaptureB  = 6;
     final int armReleaseB  = 7;
@@ -50,6 +50,7 @@ public class Robot extends SampleRobot {
     final int joy2Port  = 2;
     
     public Robot() {
+    	//drive systems
     	rightSide      = new Victor(rsMotor);
     	leftSide       = new Victor(lsMotor);
     	armSpeed       = new Victor(armCPort);
@@ -58,22 +59,29 @@ public class Robot extends SampleRobot {
     	lattice        = new Victor(latPort);
     	winch          = new Victor(winchPort);
         driveTrain     = new RobotDrive(leftSide, rightSide);
+        //joysticks
         joy1   = new Joystick(joy1Port);
         joy2   = new Joystick(joy2Port);
+        //camera
         eyeOfProvidence = CameraServer.getInstance();
-        eyeOfProvidence.setQuality(50);
+        eyeOfProvidence.setQuality(25);
         eyeOfProvidence.startAutomaticCapture("cam0");
-        LSLattice = new DigitalInput(LSLatticePort);
+        LSArm = new DigitalInput(LSArmPort);
     	}
     
     public void operatorControl() {
         driveTrain.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
-        	//Drivetrain
+        	//drive train
         	driveTrain.arcadeDrive(joy1); //joy1 is drive
         	//Arm Code
-        	armTorqueLeft.set(Deadband(joy2.getY(), armTorqueDb));  //armTorqueLeft
-        	armTorqueRight.set(Deadband(-joy2.getY(), armTorqueDb)); //armTouqueRight
+        	if(joy2.getY() >= 0 && LSArm.get() == true) {
+        		armTorqueLeft.set(Deadband(joy2.getY(), armTorqueDb));   //armTorqueLeft
+            	armTorqueRight.set(Deadband(-joy2.getY(), armTorqueDb)); //armTouqueRight
+        	}else if (joy2.getY() < 0 ) {
+        		armTorqueLeft.set(Deadband(joy2.getY(), armTorqueDb));   //armTorqueLeft
+            	armTorqueRight.set(Deadband(-joy2.getY(), armTorqueDb)); //armTouqueRight
+        	}
         	if(joy2.getRawButton(armCaptureB)){					//armSpeed
         		armSpeed.set(armCSpeedVal);
         	}else if(joy2.getRawButton(armReleaseB)){
@@ -82,7 +90,7 @@ public class Robot extends SampleRobot {
         		armSpeed.set(0.0);
         	}
         	//lift system code
-        	if(joy2.getRawButton(latticeUpB) && LSLattice.get()){					//lattice
+        	if(joy2.getRawButton(latticeUpB)){					//lattice
         		lattice.set(latticeUp);
         	}else if(joy2.getRawButton(latticeDownB)){
         		lattice.set(latticeDown);
