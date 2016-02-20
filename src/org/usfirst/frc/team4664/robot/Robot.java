@@ -24,28 +24,28 @@ public class Robot extends SampleRobot {
     DigitalInput LSArm;
     final int LSArmPort = 0;
     //Ports
-    final int lsMotor	  = 0;
-    final int rsMotor	  = 1;
-    final int armTPortL   = 2;
-    final int armTPortR   = 3;
-    final int armCPort	  = 4;
-    final int latPort     = 5;
-    final int winchPort   = 6;
-    //joystick 2 buttons
+    final int lsMotor	  = 0; //Left Side Motor
+    final int rsMotor	  = 1; //Right Side Motor
+    final int armTPortL   = 2; //Arm Left Port
+    final int armTPortR   = 3; //Arm Right Port
+    final int armCPort	  = 4; //Arm Capture Port
+    final int latPort     = 5; //Lattice (scissor lift) port
+    final int winchPort   = 6; //Winch Port
+    //Joystick 2 buttons
     final int armCaptureB  = 6;
     final int armReleaseB  = 7;
     final int latticeUpB   = 3;
     final int latticeDownB = 2;
     final int winchOutB    = 4;
     final int winchInB     = 5;
-    //speed variables
+    //Speed variables
     final double armCSpeedVal  = -1.0;
     final double armRSpeedVal  = 1.0;
     final double winchOut      = 1.0;
     final double winchIn       = -.7;
     final double latticeUp     = 0.8;
     final double latticeDown   = -.5;
-    //dead band variables
+    //Dead band variables
     final double driveXDb    = 0.3;
     final double driveYDb    = 0.3;
     final double armTorqueDb = 0.2;
@@ -54,6 +54,7 @@ public class Robot extends SampleRobot {
     final int joy2Port  = 2;
     
     public Robot() {
+    	//Drive systems
     	rightSide      = new Victor(rsMotor);
     	leftSide       = new Victor(lsMotor);
     	armSpeed       = new Victor(armCPort);
@@ -62,22 +63,37 @@ public class Robot extends SampleRobot {
     	lattice        = new Victor(latPort);
     	winch          = new Victor(winchPort);
         driveTrain     = new RobotDrive(leftSide, rightSide);
+        //Joysticks
         joy1   = new Joystick(joy1Port);
         joy2   = new Joystick(joy2Port);
+        //Camera
         eyeOfProvidence = CameraServer.getInstance();
-        eyeOfProvidence.setQuality(50);
+        eyeOfProvidence.setQuality(25);
         eyeOfProvidence.startAutomaticCapture("cam0");
+        //Limit Switch
         LSArm = new DigitalInput(LSArmPort);
     	}
     
     public void operatorControl() {
         driveTrain.setSafetyEnabled(true);
         while (isOperatorControl() && isEnabled()) {
-        	//Drivetrain
+        	//drive train
         	driveTrain.arcadeDrive(joy1); //joy1 is drive
         	//Arm Code
-        	armTorqueLeft.set(Deadband(joy2.getY(), armTorqueDb));  //armTorqueLeft
-        	armTorqueRight.set(Deadband(-joy2.getY(), armTorqueDb)); //armTouqueRight
+        	if(joy2.getY() >= armTorqueDb && LSArm.get() == true) {
+        		armTorqueLeft.set(Deadband(joy2.getY(), armTorqueDb));   //armTorqueLeft
+            	armTorqueRight.set(Deadband(-joy2.getY(), armTorqueDb)); //armTouqueRight
+            	ArmStatus = "Raising";
+        	}else if (joy2.getY() < -armTorqueDb) {
+        		armTorqueLeft.set(Deadband(joy2.getY(), armTorqueDb));   //armTorqueLeft
+            	armTorqueRight.set(Deadband(-joy2.getY(), armTorqueDb)); //armTouqueRight
+            	ArmStatus = "Lowering";
+        	}
+        	else {
+        		armTorqueLeft.set(0);
+        		armTorqueRight.set(0);
+        		ArmStatus = "False";
+        	}
         	if(joy2.getRawButton(armCaptureB)){					//armSpeed
         		armSpeed.set(armCSpeedVal);
         	}else if(joy2.getRawButton(armReleaseB)){
@@ -85,17 +101,7 @@ public class Robot extends SampleRobot {
         	}else{
         		armSpeed.set(0.0);
         	}
-        	//lift system code
-        	if(joy2.getRawButton(latticeUpB) && LSArm.get()){					//lattice
-        		lattice.set(latticeUp);
-        		ArmStatus = "Rising";
-        	}else if(joy2.getRawButton(latticeDownB)){
-        		lattice.set(latticeDown);
-        		ArmStatus = "Lowering";
-        	}else{
-        		lattice.set(0.0);
-        		ArmStatus = "False";
-        	}
+        	
         	if(joy2.getRawButton(winchOutB)){					//winch
         		winch.set(winchOut);
         	}else if(joy2.getRawButton(winchInB)){
@@ -104,8 +110,7 @@ public class Robot extends SampleRobot {
         		winch.set(0.0);
         	}
         	SmartDashboard.putString("Arm Status", ArmStatus);
-        	SmartDashboard.putString("Winch Status", CaptureStatus);
-        	SmartDashboard.putData("Arm Limit Switch", LSArm);
+        	SmartDashboard.putBoolean("Arm Limit Switch", LSArm.get());
         	Timer.delay(0.005);	// wait 5ms to avoid hogging CPU cycles
         }
     }
