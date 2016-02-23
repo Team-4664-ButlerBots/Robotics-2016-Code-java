@@ -12,9 +12,10 @@ FRC Webpage = http://www.firstinspires.org/robotics/frc
 List of items to do
 -------------------
 
-- [ ] Confirm everyone watched all of 308tube's videos about GitHub
-- [ ] Read through the WPI Library (How to set up Eclipse)
-- [ ] Set up Eclipse on all (home) computers
+- [ ] Finish drive system.
+- [ ] Add limit switches.
+- [ ] Add updated arm code.
+- [ ] Test run code.
 
 
 #####Base Layout
