@@ -86,6 +86,9 @@ public class Robot extends SampleRobot {
     }
     
     void Autonomous(){
+    	driveTrain.tankDrive(1,1); //Drive  forward
+    	Timer.delay(3.00);         //for 3 seconds
+    	driveTrain.tankDrive(0,0); //then stop
     }
     
     void Test(){
