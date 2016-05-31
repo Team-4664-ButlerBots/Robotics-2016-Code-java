@@ -15,6 +15,7 @@ public class Robot extends SampleRobot {
     Victor lattice, winch;//The Scissor lift & winch respectively
     Victor armCapture, armTorque;//armSpeed spins the intake wheels; armTorque moves input in out
     //Ports
+<<<<<<< HEAD
     final int lsMotor	  = 0;
     final int rsMotor	  = 1;
     final int armCPort    = 9;
@@ -24,13 +25,29 @@ public class Robot extends SampleRobot {
     //joystick 2 buttons
     final int armCaptureB  = 6;
     final int armReleaseB  = 8;
+=======
+    final int lsMotor   = 0;
+    final int rsMotor	= 1;
+    final int armTPort  = 2;
+    final int armCPort	= 3;
+    final int latPort   = 4;
+    final int winchPort = 5;
+    //joystick 2 buttons
+    final int armCaptureB  = 6;
+    final int armReleaseB  = 7;
+>>>>>>> d4768f9f9a0032bb3e6c91c8b6277770030d97e5
     final int latticeUpB   = 3;
     final int latticeDownB = 2;
     final int winchOutB    = 4;
     final int winchInB     = 5;
     //speed variables
+<<<<<<< HEAD
     final double armCaptureVal = 1.0;
     final double winchOut      = 1.0;
+=======
+    final double armCaptureVal = 0.25;
+    final double winchOut	   = 1.0;
+>>>>>>> d4768f9f9a0032bb3e6c91c8b6277770030d97e5
     final double winchIn       = -.7;
     final double latticeUp     = 0.8;
     final double latticeDown   = -.5;
@@ -39,6 +56,7 @@ public class Robot extends SampleRobot {
     final double driveYDb    = 0.3;
     final double armTorqueDb = 0.2;
     //Laptop ports
+<<<<<<< HEAD
     final int joy1Port	= 0;
     final int joy2Port  = 1;
     //Camera
@@ -49,6 +67,11 @@ public class Robot extends SampleRobot {
     //Limit Switch Ports
     final int limUpPort = 0;
     final int limDownPort = 1;
+=======
+    final int joy1Port = 0;
+    final int joy2Port = 1;
+    
+>>>>>>> d4768f9f9a0032bb3e6c91c8b6277770030d97e5
     public Robot() {
     	rightSide  = new Victor(rsMotor);
     	leftSide   = new Victor(lsMotor);
