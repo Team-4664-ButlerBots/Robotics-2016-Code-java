@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #####This is the code we will use for the 2016 *Robotics Challenge*
 
 Important Resources
@@ -12,9 +13,10 @@ FRC Webpage = http://www.firstinspires.org/robotics/frc
 List of items to do
 -------------------
 
-- [ ] Confirm everyone watched all of 308tube's videos about GitHub
-- [ ] Read through the WPI Library (How to set up Eclipse)
-- [ ] Set up Eclipse on all (home) computers
+- [ ] Finish drive system.
+- [ ] Add limit switches.
+- [ ] Add updated arm code.
+- [ ] Test run code.
 
 
 #####Base Layout
@@ -52,3 +54,7 @@ public class Robot extends IteritiveRobot {
 	}
 };
 ```
+=======
+This is the Communications branch.
+This branch is used to experiment with communicating data with the robot.
+>>>>>>> fcc419ff601f0da38c6fccaf753c34000e1c6c45
