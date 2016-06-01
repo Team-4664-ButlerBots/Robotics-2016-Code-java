@@ -5,8 +5,13 @@
 	<classpathentry exported="true" kind="var" path="wpilib" sourcepath="wpilib.sources"/>
 	<classpathentry exported="true" kind="var" path="networktables" sourcepath="networktables.sources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_73"/>
+<<<<<<< HEAD
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_73"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/Student/Desktop/4664 BB Temp/Robot_2016_Code/jars/NetworkTables.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/Student/Desktop/4664 BB Temp/Robot_2016_Code/jars/WPILib.jar"/>
+=======
+	<classpathentry kind="lib" path="build/jars/WPILib.jar"/>
+	<classpathentry kind="lib" path="build/jars/NetworkTables.jar"/>
+>>>>>>> 6f475a54ce4f0e64c4b194133028b22a39036fb5
 	<classpathentry kind="output" path="bin"/>
 </classpath>
